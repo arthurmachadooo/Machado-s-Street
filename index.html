@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Streetwear Style</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="imagens/Logo loja de roupa minimalista preto.png" alt="Logo">
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="estoque.html">Coleções</a></li>
+                <li><a href="sobre.html">Sobre</a></li>
+                <li><a href="carrinho.html">Carrinho</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section id="home" class="pagina">
+        <section class="titulo">
+            <img id="banner" src="imagens/banner.png" alt="banner">
+        </section>
+        <section class="produtos">
+            <div class="produto">
+                <a href="imagens/ROUPAS/CAMISA EXPLICAÇÃO.png" >
+         <img src="imagens/ROUPAS/CAMISA 1.png" alt="Produto 1">
+        </a>
+                <h3>T-Shirt King Raian Santos</h3>
+                <p>R$ 150,00</p>
+               <button data-nome="T-Shirt King Raian Santos" data-preco="150" data-imagem="imagens/ROUPAS/CAMISA 1.png">COMPRAR</button>
+            
+            </div>
+            <div class="produto">
+                <a href="imagens/ROUPAS/CAMISA 2 EXPLICAÇÃO.png">
+            <img src="imagens/ROUPAS/CAMISA 2.png" alt="Produto 2">
+        </a>
+                <h3>T-Shirt The Bira Is Art</h3>
+                <p>R$ 150,00</p>
+                
+                <button data-nome="T-Shirt The Bira Is Art" data-preco="150" data-imagem="imagens/ROUPAS/CAMISA 2.png">COMPRAR</button>
+            </div>
+            <div class="produto">
+                <a href="imagens/ROUPAS/CAMISA 3 EXPLICAÇÃO.png">
+                <img src="imagens/ROUPAS/CAMISA 3.png" alt="Produto 3">
+            </a>
+                <h3>T-Shirt Os Guri São Tinhoso</h3>
+                <p>R$ 150,00</p>
+                <button data-nome="T-Shirt Os Guri São Tinhoso" data-preco="150" data-imagem="imagens/ROUPAS/CAMISA 3.png">COMPRAR</button>
+            </div>
+        </section>
+    </section>
+
+    <footer>
+        <p>&copy; Todos direitos ao Arthur Pereira Machado. <a id="contato" href="https://wa.me/5551998190603" target="_blank"><br>☎️ CLIQUE AQUI PARA CONTATO</a></p>
+    </footer>
+
+    <script>
+    const carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
+document.querySelectorAll('.produto button').forEach((button) => {
+    button.addEventListener('click', () => {
+        const nome = button.getAttribute('data-nome');
+        const preco = parseFloat(button.getAttribute('data-preco'));
+        const imagem = button.getAttribute('data-imagem');
+        const item = { nome, preco, imagem };
+        carrinho.push(item);
+        localStorage.setItem('carrinho', JSON.stringify(carrinho));
+        alert(`${nome} foi adicionado ao carrinho!`);
+    });
+});
+    </script>
+</body>
+</html>
