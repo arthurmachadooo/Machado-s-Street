@@ -5,8 +5,463 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Estoque de Moda</title>
     <link rel="stylesheet" href="estoque.css">
+ 
 </head>
+<style>
+    .janela-produto {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        animation: aparecer 0.3s ease;
+    }
+    .conteudo-janela {
+        background: #ddd;
+        padding: 20px;
+        border-radius: 8px;
+        width: 80%;
+        max-width: 500px;
+        display: flex;
+        gap: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    .conteudo-janela img {
+        max-width: 150px;
+        border-radius: 8px;
+    }
+    .conteudo-janela .detalhes {
+        flex-grow: 1;
+    }
+    .conteudo-janela .detalhes h3 {
+        margin: 0 0 10px;
+        font-size: 1.5em;
+        color: #000;
+    }
+    .conteudo-janela .detalhes p {
+        margin: 5px 0;
+        font-size: 1.2em;
+        color: #000;
+    }
+    .conteudo-janela .tamanhos {
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+        position: relative;
+    }
+    .conteudo-janela .tamanhos div {
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: black;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: transform 0.2s ease, background 0.2s ease;
+    }
+    .conteudo-janela .tamanhos div:hover {
+        transform: scale(1.1);
+        background: green;
+    }
+    .conteudo-janela .tamanhos div.selecionado {
+        background: green;
+        color: #fff;
+    }
+    .conteudo-janela .detalhes button {
+        display: block;
+        margin-top: 20px;
+        padding: 10px 20px;
+        background: rgb(0, 0, 0);
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    .conteudo-janela .detalhes button:hover {
+        background: green;
+    }
+    .fechar-tamanhos {
+        position: absolute;
+        top: -15px;
+        right: -15px;
+        background: none;
+        border: none;
+        font-size: 1.5em;
+        color: #000;
+        cursor: pointer;
+        
+    }
+    
+    .fechar-janela {
+        background: green;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: none;
+        border: none;
+        font-size: 1.5em;
+        color: #000;
+        cursor: pointer;
+    }
+    @keyframes aparecer {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+    .mensagem-carrinho {
+position: fixed;
+bottom: 20px;
+left: 50%;
+transform: translateX(-50%);
+background-color: green;
+color: white;
+padding: 10px 20px;
+border-radius: 5px;
+display: none;
+font-size: 1.2em;
+box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+@media (max-width: 768px) {
+    .janela-produto {
+        padding: 10px;
+        flex-direction: row;
+        justify-content: flex-start;
+    }
 
+    .conteudo-janela {
+        width: 100%;
+        max-width: none;
+        padding: 15px;
+        display: flex;
+        gap: 15px;
+    }
+
+    .conteudo-janela img {
+        max-width: 75%;
+        height: auto;
+        margin-right: 20px;
+    }
+
+    .conteudo-janela .detalhes {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .conteudo-janela .detalhes h3 {
+        font-size: 1.3em;
+        margin-bottom: 10px;
+    }
+
+    .conteudo-janela .detalhes p {
+        font-size: 1.2em;
+        margin-bottom: 10px;
+    }
+
+    .conteudo-janela .tamanhos {
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+        justify-content: start;
+    }
+
+    .conteudo-janela .tamanhos div {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2em;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: black;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .conteudo-janela .tamanhos div:hover {
+        transform: scale(1.1);
+        background: green;
+    }
+
+    .conteudo-janela .tamanhos div.selecionado {
+        background: green;
+        color: #fff;
+    }
+
+    .conteudo-janela .detalhes button {
+        padding: 10px 20px;
+        background: rgb(0, 0, 0);
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 15px;
+    }
+
+    .conteudo-janela .detalhes button:hover {
+        background: green;
+    }
+
+    .fechar-janela {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        background: none;
+        border: none;
+        font-size: 1.5em;
+        color: #000;
+        cursor: pointer;
+    }
+
+    .mensagem-carrinho {
+        font-size: 1em;
+        padding: 8px 15px;
+    }
+}
+@media (max-width: 768px) {
+    .janela-produto {
+        padding: 10px;
+        flex-direction: row;
+        justify-content: flex-start;
+    }
+
+    .conteudo-janela {
+        width: 100%;
+        max-width: none;
+        padding: 15px;
+        display: flex;
+        gap: 15px;
+    }
+
+    .conteudo-janela img {
+        max-width: 50%;
+        height: auto;
+        margin-right: 20px;
+    }
+
+    .conteudo-janela .detalhes {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .conteudo-janela .detalhes h3 {
+        font-size: 1.3em;
+        margin-bottom: 10px;
+    }
+
+    .conteudo-janela .detalhes p {
+        font-size: 1.2em;
+        margin-bottom: 10px;
+    }
+
+    .conteudo-janela .tamanhos {
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+        justify-content: start;
+    }
+
+    .conteudo-janela .tamanhos div {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2em;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: black;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .conteudo-janela .tamanhos div:hover {
+        transform: scale(1.1);
+        background: green;
+    }
+
+    .conteudo-janela .tamanhos div.selecionado {
+        background: green;
+        color: #fff;
+    }
+
+    .conteudo-janela .detalhes button {
+        padding: 10px 20px;
+        background: rgb(0, 0, 0);
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 15px;
+    }
+
+    .conteudo-janela .detalhes button:hover {
+        background: green;
+    }
+
+    .fechar-janela {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        background: none;
+        border: none;
+        font-size: 1.5em;
+        color: #000;
+        cursor: pointer;
+    }
+
+    .mensagem-carrinho {
+        font-size: 1em;
+        padding: 8px 15px;
+    }
+}
+@media (max-width: 768px) {
+    .janela-produto {
+        padding: 10px;
+        flex-direction: column;
+        justify-content: flex-start;
+    }
+
+    .conteudo-janela {
+        width: 100%;
+        max-width: none;
+        padding: 15px;
+        display: flex;
+        gap: 15px;
+        align-items: flex-start;
+    }
+
+    .conteudo-janela img {
+        max-width: 20%; 
+        height: auto;
+        margin-right: 15px;
+    }
+
+    .conteudo-janela .detalhes {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .conteudo-janela .detalhes h3 {
+        font-size: 1.3em;
+        margin-bottom: 10px;
+    }
+
+    .conteudo-janela .detalhes p {
+        font-size: 1.2em;
+        margin-bottom: 10px;
+    }
+
+    .conteudo-janela .tamanhos {
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+        justify-content: start;
+    }
+
+    .conteudo-janela .tamanhos div {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2em;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: black;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .conteudo-janela .tamanhos div:hover {
+        transform: scale(1.1);
+        background: green;
+    }
+
+    .conteudo-janela .tamanhos div.selecionado {
+        background: green;
+        color: #fff;
+    }
+
+    .conteudo-janela .detalhes button {
+        padding: 10px 20px;
+        background: rgb(0, 0, 0);
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 15px;
+    }
+
+    .conteudo-janela .detalhes button:hover {
+        background: green;
+    }
+
+    .fechar-janela {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        background: none;
+        border: none;
+        font-size: 1.5em;
+        color: #000;
+        cursor: pointer;
+    }
+
+    .mensagem-carrinho {
+        font-size: 1em;
+        padding: 8px 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .conteudo-janela img {
+        max-width: 20%;  
+        margin-right: 10px;
+    }
+
+    .conteudo-janela .detalhes h3 {
+        font-size: 1.2em;
+        margin-bottom: 10px;
+    }
+
+    .conteudo-janela .detalhes p {
+        font-size: 1.1em;
+    }
+
+    .conteudo-janela .detalhes button {
+        padding: 8px 15px;
+        font-size: 1em;
+    }
+
+    .fechar-janela {
+        top: 5px;
+        right: 5px;
+    }
+
+    .mensagem-carrinho {
+        font-size: 0.9em;
+        padding: 6px 12px;
+    }
+}
+
+
+</style>
 <body>
     <header>
         <div class="logo">
@@ -21,7 +476,7 @@
             </ul>
         </nav>
     </header>
-    
+
     <div class="filters"></div>
     <img id="colecao" src="imagens/COLEÇÕES DA LOJA.png" alt="">
     <img id="colecao2" src="imagens/COLEÇÕES DA LOJA - Copia.png" alt="">
@@ -35,78 +490,122 @@
     </select>
 
     <div class="products">
-
-        <div class="products">
-            <div class="product camiseta">
-                <a href="imagens/ROUPAS/CAMISA EXPLICAÇÃO.png">
+        <div class="product camiseta">
+            <a href="imagens/ROUPAS/CAMISA EXPLICAÇÃO.png">
                 <img src="imagens/ROUPAS/CAMISA 1.png" alt="Camiseta">
             </a>
-                <h3>T-Shirt King Raian Santos</h3>
-                <p>R$ 150,00</p>
-                <button data-nome="T-Shirt King Raian Santos" data-preco="150" data-imagem="imagens/ROUPAS/CAMISA 1.png">COMPRAR</button>
-            </div>
-            <div class="product camiseta">
-                <a href="imagens/ROUPAS/CAMISA 2 EXPLICAÇÃO.png">
+            <h3>T-Shirt King Raian Santos</h3>
+            <p>R$ 150,00</p>
+            <button data-nome="T-Shirt King Raian Santos" data-preco="150" data-imagem="imagens/ROUPAS/CAMISA 1.png">COMPRAR</button>
+        </div>
+        
+        <div class="product camiseta">
+            <a href="imagens/ROUPAS/CAMISA 2 EXPLICAÇÃO.png">
                 <img src="imagens/ROUPAS/CAMISA 2.png" alt="Camiseta">
             </a>
-                <h3>T-Shirt The Bira Is Art</h3>
-                <p>R$ 150,00</p>
-                <button data-nome="T-Shirt Biras Is Art" data-preco="150" data-imagem="imagens/ROUPAS/CAMISA 2.png">COMPRAR</button>
-            </div>
-            <div class="product camiseta">
-                <a href="imagens/ROUPAS/CAMISA 3 EXPLICAÇÃO.png">
+            <h3>T-Shirt The Bira Is Art</h3>
+            <p>R$ 150,00</p>
+            <button data-nome="T-Shirt The Bira Is Art" data-preco="150" data-imagem="imagens/ROUPAS/CAMISA 2.png">COMPRAR</button>
+        </div>
+        <div class="product camiseta">
+            <a href="imagens/ROUPAS/CAMISA 3 EXPLICAÇÃO.png">
                 <img src="imagens/ROUPAS/CAMISA 3.png" alt="Camiseta">
             </a>
-                <h3>T-Shirt Os Guri São Tinhoso</h3>
-                <p>R$ 150,00</p>
-                <button data-nome="T-Shirt Os Guri São Tinhoso" data-preco="150" data-imagem="imagens/ROUPAS/CAMISA 3.png">COMPRAR</button>
-            </div>
-            <div class="product camiseta">
-                <a href="imagens/ROUPAS/CAMISA 4.png">
+            <h3>T-Shirt Os Guri São Tinhoso</h3>
+            <p>R$ 150,00</p>
+            <button data-nome="T-Shirt Os Guri São Tinhoso" data-preco="150" data-imagem="imagens/ROUPAS/CAMISA 3.png">COMPRAR</button>
+        </div> 
+        <div class="product camiseta">
+            <a href="imagens/ROUPAS/CAMISA 4.png">
                 <img src="imagens/ROUPAS/CAMISA 4 EXPLICAÇÃO.png" alt="Camiseta">
             </a>
-                <h3>T-Shirt Legend Otto Seibt</h3>
-                <p>R$ 150,00</p>
-                <button data-nome="T-Shirt Legend Otto Seibt" data-preco="150" data-imagem="imagens/ROUPAS/CAMISA 4 EXPLICAÇÃO.png">COMPRAR</button>
-            </div>
-            <div class="product camiseta">
-                <a href="imagens/ROUPAS/CAMISA 5 EXPLICAÇÃO.png">
+            <h3>T-Shirt Legend Otto Seibt</h3>
+            <p>R$ 150,00</p>
+            <button data-nome="T-Shirt Otto Seibt" data-preco="150" data-imagem="imagens/ROUPAS/CAMISA 4.png">COMPRAR</button>
+        </div>
+        <div class="product camiseta">
+            <a href="imagens/ROUPAS/CAMISA 5 EXPLICAÇÃO (1).png">
                 <img src="imagens/ROUPAS/CAMISA 5.png" alt="Camiseta">
             </a>
-                <h3>T-Shirt FARRA</h3>
-                <p>R$ 150,00</p>
-                <button data-nome="T-Shirt FARRA" data-preco="150" data-imagem="imagens/ROUPAS/CAMISA 5 EXPLICAÇÃO.png">COMPRAR</button>
-            </div>
+            <h3>T-Shirt FARRA</h3>
+            <p>R$ 150,00</p>
+            <button data-nome="T-Shirt FARRA" data-preco="150" data-imagem="imagens/ROUPAS/CAMISA 5.png">COMPRAR</button>
+        </div>
+   
     </div>
-    
+
+    <div class="janela-produto" id="janela-produto">
+        <div class="conteudo-janela">
+            <img src="" alt="Imagem do produto" id="imagem-produto">
+            <div class="detalhes">
+                <h3 id="nome-produto"></h3>
+                <p id="preco-produto"></p>
+                <button class="fechar-janela" id="fechar-janela">&times;</button>
+                <div class="tamanhos" id="opcoes-tamanho">
+                    <div data-tamanho="PP">PP</div>
+                    <div data-tamanho="P">P</div>
+                    <div data-tamanho="M">M</div>
+                    <div data-tamanho="G">G</div>
+                    <div data-tamanho="GG">GG</div>
+                </div>
+                <button id="adicionar-carrinho">Adicionar ao Carrinho</button>
+            </div>
+        </div>
+    </div>
+    <div id="mensagem-carrinho" class="mensagem-carrinho">
+        <p>Item adicionado ao carrinho!</p>
+    </div>
+
     <footer>
         <p>&copy; Todos direitos ao Arthur Pereira Machado. <a id="contato" href="https://wa.me/5551998190603" target="_blank"><br>☎️ CLIQUE AQUI PARA CONTATO</a></p>
     </footer>
 
     <script>
-        // Inicializa o carrinho a partir do localStorage ou cria um novo array vazio
-        const carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
+const janelaProduto = document.getElementById('janela-produto');
+const imagemProduto = document.getElementById('imagem-produto');
+const nomeProduto = document.getElementById('nome-produto');
+const precoProduto = document.getElementById('preco-produto');
+const fecharJanela = document.getElementById('fechar-janela');
+const adicionarCarrinho = document.getElementById('adicionar-carrinho');
+const mensagemCarrinho = document.getElementById('mensagem-carrinho');
+const opcoesTamanho = document.querySelectorAll('.tamanhos div');
+const carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
+document.querySelectorAll('.product button').forEach((botao) => {
+    botao.addEventListener('click', () => {
+        const nome = botao.getAttribute('data-nome');
+        const preco = botao.getAttribute('data-preco');
+        const imagem = botao.getAttribute('data-imagem');
+        imagemProduto.src = imagem;
+        nomeProduto.textContent = nome;
+        precoProduto.textContent = `Preço: R$ ${preco},00`;
+        opcoesTamanho.forEach((t) => t.classList.remove('selecionado')); 
+        janelaProduto.style.display = 'flex';
+    });
+});
+opcoesTamanho.forEach((opcao) => {
+    opcao.addEventListener('click', () => {
+        opcoesTamanho.forEach((t) => t.classList.remove('selecionado'));
+        opcao.classList.add('selecionado');
+    });
+});
+fecharJanela.addEventListener('click', () => {
+    janelaProduto.style.display = 'none';
+});
 
-        // Adiciona evento aos botões de compra
-        document.querySelectorAll('.product button').forEach((button) => {
-            button.addEventListener('click', () => {
-                // Obtém os dados do produto
-                const nome = button.getAttribute('data-nome');
-                const preco = parseFloat(button.getAttribute('data-preco'));
-                const imagem = button.getAttribute('data-imagem');
+adicionarCarrinho.addEventListener('click', () => {
+    const item = {
+        nome: nomeProduto.textContent,
+        preco: parseFloat(precoProduto.textContent.replace('Preço: R$ ', '').replace(',00', '')),
+        imagem: imagemProduto.src,
+        tamanho: document.querySelector('.tamanhos div.selecionado')?.textContent || 'Tamanho não selecionado',
+    };
+    carrinho.push(item);
+    localStorage.setItem('carrinho', JSON.stringify(carrinho));
+    mensagemCarrinho.style.display = 'block';
+    setTimeout(() => mensagemCarrinho.style.display = 'none', 3000);
+    janelaProduto.style.display = 'none';
+});
 
-                // Cria o objeto do produto
-                const produto = { nome, preco, imagem };
-                carrinho.push(produto);
-
-                // Atualiza o localStorage com o novo carrinho
-                localStorage.setItem('carrinho', JSON.stringify(carrinho));
-
-                // Exibe uma mensagem de sucesso
-                alert(`${nome} foi adicionado ao carrinho!`);
-            });
-        });
     </script>
 </body>
 </html>
-
